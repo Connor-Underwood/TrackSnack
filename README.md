@@ -1,5 +1,5 @@
-# WinterBreak
+# Exercise App
 
-# We making project over Winter Break
+# By: Connor Underwood, Suchir Sumant, Vijay Vittal
 
-# YUHHHH
+
