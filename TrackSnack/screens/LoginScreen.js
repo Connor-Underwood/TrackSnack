@@ -14,21 +14,14 @@ const LoginScreen = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        navigation.replace("Home")
+        navigation.navigate("Home")
       }
     })
 
     return unsubscribe
   }, [])
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Registered with:', user.email);
-      })
-      .catch(error => alert(error.message))
-  }
+  
 
   const handleLogin = () => {
       signInWithEmailAndPassword(auth, email, password)
@@ -44,6 +37,9 @@ const LoginScreen = () => {
       style={styles.container}
       behavior="padding"
     >
+      <View>
+        <Text style={styles.logo}>Logo Here!</Text>
+      </View>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -67,11 +63,9 @@ const LoginScreen = () => {
         >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
+        <Text>Don't have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.buttonLink}>Register Now!</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -124,5 +118,13 @@ const styles = StyleSheet.create({
     color: '#0782F9',
     fontWeight: '700',
     fontSize: 16,
+  },
+  buttonLink: {
+    color: 'blue'
+
+  },
+  logo: {
+    color: 'black',
+    position: 'relative',
   },
 })
