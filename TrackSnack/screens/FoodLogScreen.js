@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { auth } from '../firebase';
+import AuthContext from '../AuthContext';
 
 const FoodLogScreen = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
 
+
+
  
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace('Login');
-      })
-      .catch(error => alert(error.message));
-  };
+  // const handleSignOut = () => {
+  //   auth
+  //     .signOut()
+  //     .then(() => {
+  //       navigation.replace('Login');
+  //     })
+  //     .catch(error => alert(error.message));
+  // };
+
+  
 
 
   return (
@@ -23,12 +28,7 @@ const FoodLogScreen = () => {
       <View style={styles.emailContainer}>
         <Text style={styles.emailText}>Email: {auth.currentUser?.email}</Text>
       </View>
-      <TouchableOpacity
-        onPress={handleSignOut}
-        style={styles.signOutButton}
-      >
-        <Text style={styles.signOutButtonText}>Sign out</Text>
-      </TouchableOpacity>
+      
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Search our database!"
@@ -38,15 +38,7 @@ const FoodLogScreen = () => {
           onChangeText={text => setSearchText(text)}
         />
       </View>
-      <View
-      style={styles.buttonContainer}>
-      <TouchableOpacity
-      style={styles.button}
-      onPress={() => navigation.replace('DashBoard')}>
-        <Text
-        style={styles.buttonText}>DashBoard</Text>
-        </TouchableOpacity>
-      </View>
+
     </View>
   );
 };

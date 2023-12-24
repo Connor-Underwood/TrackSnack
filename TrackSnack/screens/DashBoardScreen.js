@@ -8,15 +8,6 @@ const DashBoardScreen = () => {
   return (
     <View>
       <Text>DashBoardScreen</Text>
-      <View
-      style={styles.buttonContainer}>
-      <TouchableOpacity
-      style={styles.button}
-      onPress={() => navigation.replace('FoodLog')}>
-        <Text
-        style={styles.buttonText}>FoodLog</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   )
 }

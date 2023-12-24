@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import AuthContext from '../AuthContext';
 
 
 const LoginScreen = () => {
@@ -11,15 +12,9 @@ const LoginScreen = () => {
 
   const navigation = useNavigation()
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.replace("DashBoard")
-      }
-    })
 
-    return unsubscribe
-  }, [])
+
+  const { setIsAuthenticated } = useContext(AuthContext)
 
   
 
@@ -28,6 +23,7 @@ const LoginScreen = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
+        setIsAuthenticated(true)
       })
       .catch(error => alert(error.message))
   }

@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useEffect, useState } from 'react'
+import React, { useContext,  useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-
+import AuthContext from '../AuthContext';
 
 const RegisterScreen = () => {
 
@@ -12,21 +12,16 @@ const RegisterScreen = () => {
 
     const navigation = useNavigation()
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.navigate("DashBoard")
-      }
-    })
-
-    return unsubscribe
-  }, [])
+    const { setIsAuthenticated } = useContext(AuthContext);
+    
+    
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Registered with:', user.email);
+        setIsAuthenticated(true)
       })
       .catch(error => alert(error.message))
   }
