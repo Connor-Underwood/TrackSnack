@@ -1,20 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, FlatList } from 'react-native';
+import { Modal, StyleSheet, Text, TouchableOpacity, View, TextInput, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { auth } from '../firebase';
 import AuthContext from '../AuthContext';
 
 const FoodLogScreen = () => {
-  const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [suggestions, setSuggestions] = useState([])
+  const [modalVisible, setModalVisible] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
 
 
+  const APP_ID = "0d9b375e"
+  const APP_KEY = "b75ef3c25a294386476d882d8fb37cea"
 
- 
   const handleSearch = async (searchTerm) => {
-    const APP_ID = "0d9b375e"
-    const APP_KEY = "b75ef3c25a294386476d882d8fb37cea"
+    const URL = `https://api.edamam.com/api/food-database/v2/parser?app_id=${APP_ID}&app_key=${APP_KEY}&ingr=${searchTerm}`
+
+    try {
+      const response = await fetch(URL)
+      const data = await response.json()
+      setSearchResults(data.hints)
+      setSuggestions([])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+ 
+  const handleAutocomplete = async (searchTerm) => {
+    console.log("SEARCHING BREH")
+    
     const URL = `https://api.edamam.com/auto-complete?app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchTerm}&limit=5`
 
     try {
@@ -27,8 +42,8 @@ const FoodLogScreen = () => {
   }
 
   useEffect(() => {
-    if (searchText) {
-      handleSearch(searchText)
+    if (searchText.length >= 3) {
+      handleAutocomplete(searchText)
     } else {
       setSuggestions([])
     }
@@ -40,21 +55,43 @@ const FoodLogScreen = () => {
   return (
     <View style={styles.container}>
       
-      
-      <View style={styles.inputContainer}>
+      {/* Trigger button */}
+      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
+        <Text>Search</Text>
+      </TouchableOpacity>
+
+      {/* Modal for search */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.inputContainer}>
         <TextInput
           placeholder="Search our database!"
           style={styles.input}
           value={searchText}
-          onSubmitEditing={() => { /**/ }}
+          onSubmitEditing={() => handleSearch(searchText)}
           onChangeText={text => setSearchText(text)}
         />
         <FlatList
         data={suggestions}
-        keyExtractor={(index) => index.toString()}
+        keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => <Text>{item}</Text>}
         />
       </View>
+      <FlatList
+      data={searchResults}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => <Text>Name: {item.food.label}, Calories: {item.food.nutrients.ENERC_KCAL}, Protein: {item.food.nutrients.PROCNT}, 
+      Fat: {item.food.nutrients.FAT}, Carbohydrates: {item.food.nutrients.CHOCDF}</Text>}
+      />
+      <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
+        <Text>Close</Text>
+      </TouchableOpacity>
+      </Modal>
+      
 
     </View>
   );
