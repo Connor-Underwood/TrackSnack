@@ -1,52 +1,84 @@
-import { useNavigation } from '@react-navigation/core'
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { auth } from '../firebase'
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import { auth } from '../firebase';
+import BarCodeScanner from '../components/BarCode'
 
 const HomeScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [searchText, setSearchText] = useState('');
 
+ 
   const handleSignOut = () => {
     auth
       .signOut()
       .then(() => {
-        navigation.goBack()
+        navigation.replace('Login');
       })
-      .catch(error => alert(error.message))
-  }
+      .catch(error => alert(error.message));
+  };
+
 
   return (
     <View style={styles.container}>
-      <Text>Email: {auth.currentUser?.email}</Text>
+      <View style={styles.emailContainer}>
+        <Text style={styles.emailText}>Email: {auth.currentUser?.email}</Text>
+      </View>
       <TouchableOpacity
         onPress={handleSignOut}
-        style={styles.button}
+        style={styles.signOutButton}
       >
-        <Text style={styles.buttonText}>Sign out</Text>
+        <Text style={styles.signOutButtonText}>Sign out</Text>
       </TouchableOpacity>
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Search our database!"
+          style={styles.input}
+          value={searchText}
+          onSubmitEditing={() => { /* handleSearch(searchText) */ }}
+          onChangeText={text => setSearchText(text)}
+        />
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 40,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
-   button: {
+  emailContainer: {
+    // Additional styles as needed
+  },
+  emailText: {
+    textAlign: 'center',
+  },
+  signOutButton: {
     backgroundColor: '#0782F9',
-    width: '60%',
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 40,
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
-  buttonText: {
+  signOutButtonText: {
     color: 'white',
     fontWeight: '700',
     fontSize: 16,
   },
-})
+  inputContainer: {
+    width: '80%',
+    marginTop: 20,
+  },
+  input: {
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+});
