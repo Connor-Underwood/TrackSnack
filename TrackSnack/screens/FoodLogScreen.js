@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { auth } from '../firebase';
 import AuthContext from '../AuthContext';
@@ -7,35 +7,52 @@ import AuthContext from '../AuthContext';
 const FoodLogScreen = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
+  const [suggestions, setSuggestions] = useState([])
 
 
 
  
-  // const handleSignOut = () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => {
-  //       navigation.replace('Login');
-  //     })
-  //     .catch(error => alert(error.message));
-  // };
+  const handleSearch = async (searchTerm) => {
+    const APP_ID = "0d9b375e"
+    const APP_KEY = "b75ef3c25a294386476d882d8fb37cea"
+    const URL = `https://api.edamam.com/auto-complete?app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchTerm}&limit=5`
+
+    try {
+      const response = await fetch(URL)
+      const data = await response.json()
+      setSuggestions(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (searchText) {
+      handleSearch(searchText)
+    } else {
+      setSuggestions([])
+    }
+  }, [searchText])
 
   
 
 
   return (
     <View style={styles.container}>
-      <View style={styles.emailContainer}>
-        <Text style={styles.emailText}>Email: {auth.currentUser?.email}</Text>
-      </View>
+      
       
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Search our database!"
           style={styles.input}
           value={searchText}
-          onSubmitEditing={() => { /* handleSearch(searchText) */ }}
+          onSubmitEditing={() => { /**/ }}
           onChangeText={text => setSearchText(text)}
+        />
+        <FlatList
+        data={suggestions}
+        keyExtractor={(index) => index.toString()}
+          renderItem={({ item }) => <Text>{item}</Text>}
         />
       </View>
 

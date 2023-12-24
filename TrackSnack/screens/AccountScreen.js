@@ -18,7 +18,11 @@ const AccountScreen = () => {
 
   return (
     <View>
+        
       <Text>AccountScreen</Text>
+      <View style={styles.emailContainer}>
+        <Text style={styles.emailText}>Email: {auth.currentUser?.email}</Text>
+      </View>
       <View
       style={styles.buttonContainer}>
         <TouchableOpacity
