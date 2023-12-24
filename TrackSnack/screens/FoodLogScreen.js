@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { auth } from '../firebase';
-import BarCodeScanner from '../components/BarCode'
 
-const HomeScreen = () => {
+const FoodLogScreen = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
 
@@ -43,7 +42,7 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default FoodLogScreen;
 
 const styles = StyleSheet.create({
   container: {
