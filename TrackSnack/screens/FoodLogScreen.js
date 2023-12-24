@@ -38,6 +38,15 @@ const FoodLogScreen = () => {
           onChangeText={text => setSearchText(text)}
         />
       </View>
+      <View
+      style={styles.buttonContainer}>
+      <TouchableOpacity
+      style={styles.button}
+      onPress={() => navigation.replace('DashBoard')}>
+        <Text
+        style={styles.buttonText}>DashBoard</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -49,6 +58,19 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 40,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    width: '60%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  button: {
+    backgroundColor: '#0782F9',
+    width: '100%',
+    padding: 15,
+    borderRadius: 10,
     alignItems: 'center',
   },
   emailContainer: {
