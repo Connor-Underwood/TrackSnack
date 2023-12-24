@@ -60,13 +60,7 @@ const RegisterScreen = () => {
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-        style={styles.button}
-        onPress={() => navigation.goBack()}>
-        <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
-        </View>
+      
     </KeyboardAvoidingView>
   )
 }
